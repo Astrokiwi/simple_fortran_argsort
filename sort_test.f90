@@ -1,39 +1,4 @@
-
-      program sort_test
-          implicit none
-
-    
-          real(kind=8), dimension(:), allocatable :: a
-          integer, dimension(:), allocatable :: sorted_indices
-        
-          integer :: n,npow
-          integer :: i,ip,jp
-        
-          do n=1,10000
-  !         do npow=1,7
-  !             n=10**npow
-
-              allocate(a(n))
-              allocate(sorted_indices(n))
-        
-              call random_number(a)
-              call merge_argsort(a,sorted_indices)
-
-              do i=1,n-1
-                  ip = sorted_indices(i)
-                  jp = sorted_indices(i+1)
-                  if ( a(ip)<a(jp) ) then
-                      print *,n,"FAILED"
-                      stop
-                  endif
-              end do
-              print *,n,"PASSED"
-
-              deallocate(a)
-              deallocate(sorted_indices)
-        
-          end do
-    
+      module merge
       contains
           subroutine merge_argsort(r,d)
               real(kind=8), intent(in), dimension(:) :: r
@@ -86,5 +51,43 @@
 
               return
           end subroutine    
+      end module
+ 
+      program sort_test
+          use merge
+          implicit none
+
+    
+          real(kind=8), dimension(:), allocatable :: a
+          integer, dimension(:), allocatable :: sorted_indices
         
-      end program
+          integer :: n,npow
+          integer :: i,ip,jp
+        
+          do n=1,10000
+  !         do npow=1,7
+  !             n=10**npow
+
+              allocate(a(n))
+              allocate(sorted_indices(n))
+        
+              call random_number(a)
+              call merge_argsort(a,sorted_indices)
+
+              do i=1,n-1
+                  ip = sorted_indices(i)
+                  jp = sorted_indices(i+1)
+                  if ( a(ip)<a(jp) ) then
+                      print *,n,"FAILED"
+                      stop
+                  endif
+              end do
+              print *,n,"PASSED"
+
+              deallocate(a)
+              deallocate(sorted_indices)
+        
+          end do
+       
+      end program    
+
